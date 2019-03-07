@@ -93,6 +93,13 @@ svm = SVC(gamma='auto')
 svm.fit(X_train, Y_train)
 predictions = svm.predict(X_validation)
 
+print('prediction =', predictions)
 print(str('accuracy = ') + str(accuracy_score(Y_validation, predictions)))
 print(confusion_matrix(Y_validation, predictions))
 print(classification_report(Y_validation, predictions))
+
+#mock single tuple of features for classification
+single_match = [[13, 85, 22, 154, 4, 76, 23, 94, 12, 61]]
+single_prediction = svm.predict(single_match) 
+
+print(single_prediction)
