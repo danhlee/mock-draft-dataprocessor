@@ -13,6 +13,8 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 
+import sys
+
 # Load dataset
 url = "matches.csv"
 names = ['championId_1', 'championId_2', 'championId_3', 'championId_4', 'championId_5', 'championId_6', 'championId_7', 'championId_8', 'championId_9', 'championId_10', 'class']
@@ -89,7 +91,7 @@ for name, model in models:
 
 
 # Make predictions on validation dataset (using SVM) - 0.92
-svm = SVC(gamma='auto')
+svm = SVC(gamma='auto', probability=True)
 svm.fit(X_train, Y_train)
 predictions = svm.predict(X_validation)
 
@@ -99,7 +101,35 @@ print(confusion_matrix(Y_validation, predictions))
 print(classification_report(Y_validation, predictions))
 
 #mock single tuple of features for classification
-single_match = [[13, 85, 22, 154, 4, 76, 23, 94, 12, 61]]
-single_prediction = svm.predict(single_match) 
+#single_match = [[13, 85, 22, 154, 4, 76, 23, 94, 12, 61]]
 
-print(single_prediction)
+#trial_1 [13,85,22,154,4,76,23,94,12,61]
+#trial_2 [240,29,63,64,1,24,238,432,51,17] => class should be [100] (from training set)
+
+
+def convertStringArgsToArray(stringArg):
+  return list(map(int, stringArg.strip('[]').split(',')))
+  
+#take 1 tuple of features from command line argument
+print('length of argv =',len(sys.argv))
+print('argv =', sys.argv)
+if len(sys.argv) == 2:
+  single_match = convertStringArgsToArray(sys.argv[1])
+  matches = []
+  matches.append(single_match)
+  single_prediction = svm.predict(matches)
+  class_probabilities = svm.predict_proba(matches)
+  
+  print('prediction for single match =', single_prediction)
+  print('confidence for single match =', class_probabilities)
+  print('classes of probabilities =', svm.classes_)
+  
+  # TODO 1: not sure if probability is accurate ()
+  # Trial_2 prediction = 100 (which is right), but ...
+  # probability score says .98 for [200]
+  # probability score says .017 for [100]
+  # shouldn't this be reversed?
+  print(pandas.DataFrame(svm.predict_proba(matches), columns=svm.classes_))
+  
+else:
+  print('no args passed in...')
