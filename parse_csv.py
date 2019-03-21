@@ -16,12 +16,13 @@ from sklearn.svm import SVC
 import sys
 
 # Load dataset
-url = "matches.csv"
-names = ['championId_1', 'championId_2', 'championId_3', 'championId_4', 'championId_5', 'championId_6', 'championId_7', 'championId_8', 'championId_9', 'championId_10', 'class']
-dataset = pandas.read_csv(url, names=names)
+csvFile = "matches.csv"
+names = ['b_top', 'b_', 'championId_3', 'championId_4', 'championId_5', 'championId_6', 'championId_7', 'championId_8', 'championId_9', 'championId_10', 'class']
+dataset = pandas.read_csv(csvFile, names=names)
 
-# shape
+# shape shows (numberOfTuples, numberOfFeatures)
 print(dataset.shape)
+# shows first 20 tuples
 print(dataset.head(20))
 
 # descriptions
