@@ -31,6 +31,12 @@ for jsonFile in os.listdir(directory):
     championsArray = []
     for participant in participants:
       #match_tuple += ( str(participant['championId']) + ',')
+      
+      lane = participant['timeline']['lane']
+      role = participant['timeline']['role']
+      team = participant['teamId']
+      
+
       championsArray.append(participant['championId'])
 
     #match_tuple += winner
