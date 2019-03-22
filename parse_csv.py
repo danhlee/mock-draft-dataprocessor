@@ -16,9 +16,9 @@ from sklearn.svm import SVC
 import sys
 
 # Load dataset
-csvFile = "matches.csv"
-names = ['b_top', 'b_', 'championId_3', 'championId_4', 'championId_5', 'championId_6', 'championId_7', 'championId_8', 'championId_9', 'championId_10', 'class']
-dataset = pandas.read_csv(csvFile, names=names)
+csv = "matches.csv"
+names = ['b_top','b_jung','b_mid','b_bot','b_sup','r_top','r_jung','r_mid','r_bot','r_sup','class']
+dataset = pandas.read_csv(csv, names=names, float_precision='high')
 
 # shape shows (numberOfTuples, numberOfFeatures)
 print(dataset.shape)
@@ -29,19 +29,16 @@ print(dataset.head(20))
 # print(dataset.describe())
 
 # class distribution
+print('--== CLASS DISTRIBUTION ==--')
 print(dataset.groupby('class').size())
-
-
+print('--== CLASS DISTRIBUTION ==--')
 # scatter plot matrix
 # scatter_matrix(dataset)
 # plt.show()
 
-array = dataset.values
-print(array)
-
 # Split-out validation dataset
 array = dataset.values
-print(array)
+# print(array)
 X = array[:,0:10]
 Y = array[:,10]
 validation_size = 0.20
@@ -62,6 +59,7 @@ models.append(('NB', GaussianNB()))
 models.append(('SVM', SVC(gamma='auto')))
 
 # evaluate each model in turn
+print('Here come the comparisons...')
 results = []
 names = []
 for name, model in models:
@@ -70,9 +68,9 @@ for name, model in models:
 	results.append(cv_results)
 	names.append(name)
 	msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
-	print(msg)
+	print('mean(stdev) = ',msg)
 
-# Compare Algorithms
+# # Compare Algorithms
 # fig = plt.figure()
 # fig.suptitle('Algorithm Comparison')
 # ax = fig.add_subplot(111)
@@ -80,24 +78,24 @@ for name, model in models:
 # ax.set_xticklabels(names)
 # plt.show()
 
-# Make predictions on validation dataset (using KNN)
+# # Make predictions on validation dataset (using KNN)
 # knn = KNeighborsClassifier()
 # knn.fit(X_train, Y_train)
 # predictions = knn.predict(X_validation)
 
 # Make predictions on validation dataset (using Decision Tree) -  0.91
-# dt = DecisionTreeClassifier()
-# dt.fit(X_train, Y_train)
-# predictions = dt.predict(X_validation)
+dt = DecisionTreeClassifier()
+dt.fit(X_train, Y_train)
+predictions = dt.predict(X_validation)
 
+# # Make predictions on validation dataset (using SVM) - 0.92
+# svm = SVC(gamma='auto', probability=True)
+# svm.fit(X_train, Y_train)
+# predictions = svm.predict(X_validation)
 
-# Make predictions on validation dataset (using SVM) - 0.92
-svm = SVC(gamma='auto', probability=True)
-svm.fit(X_train, Y_train)
-predictions = svm.predict(X_validation)
-
+# Print Prediction accuracy from using test set
 print('prediction =', predictions)
-print(str('accuracy = ') + str(accuracy_score(Y_validation, predictions)))
+print('accuracy = ', accuracy_score(Y_validation, predictions))
 print(confusion_matrix(Y_validation, predictions))
 print(classification_report(Y_validation, predictions))
 
@@ -107,30 +105,30 @@ print(classification_report(Y_validation, predictions))
 #trial_1 [13,85,22,154,4,76,23,94,12,61]
 #trial_2 [240,29,63,64,1,24,238,432,51,17] => class should be [100] (from training set)
 
-
-def convertStringArgsToArray(stringArg):
-  return list(map(int, stringArg.strip('[]').split(',')))
+# [Feature: Array input & single match prediction]
+# def convertStringArgsToArray(stringArg):
+#   return list(map(int, stringArg.strip('[]').split(',')))
   
-#take 1 tuple of features from command line argument
-print('length of argv =',len(sys.argv))
-print('argv =', sys.argv)
-if len(sys.argv) == 2:
-  single_match = convertStringArgsToArray(sys.argv[1])
-  matches = []
-  matches.append(single_match)
-  single_prediction = svm.predict(matches)
-  class_probabilities = svm.predict_proba(matches)
+# #take 1 tuple of features from command line argument
+# print('length of argv =',len(sys.argv))
+# print('argv =', sys.argv)
+# if len(sys.argv) == 2:
+#   single_match = convertStringArgsToArray(sys.argv[1])
+#   matches = []
+#   matches.append(single_match)
+#   single_prediction = svm.predict(matches)
+#   class_probabilities = svm.predict_proba(matches)
   
-  print('prediction for single match =', single_prediction)
-  print('confidence for single match =', class_probabilities)
-  print('classes of probabilities =', svm.classes_)
+#   print('prediction for single match =', single_prediction)
+#   print('confidence for single match =', class_probabilities)
+#   print('classes of probabilities =', svm.classes_)
   
-  # TODO 1: not sure if probability is accurate ()
-  # Trial_2 prediction = 100 (which is right), but ...
-  # probability score says .98 for [200]
-  # probability score says .017 for [100]
-  # shouldn't this be reversed?
-  print(pandas.DataFrame(svm.predict_proba(matches), columns=svm.classes_))
+#   # TODO 1: not sure if probability is accurate ()
+#   # Trial_2 prediction = 100 (which is right), but ...
+#   # probability score says .98 for [200]
+#   # probability score says .017 for [100]
+#   # shouldn't this be reversed?
+#   print(pandas.DataFrame(svm.predict_proba(matches), columns=svm.classes_))
   
-else:
-  print('no args passed in...')
+# else:
+#   print('no args passed in...')

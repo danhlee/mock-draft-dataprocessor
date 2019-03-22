@@ -28,7 +28,7 @@ for jsonFile in os.listdir(directory):
       winner = '200'
 
     #match_tuple = ''
-    championsArray = []
+    championsTuple = [None]*11
     for participant in participants:
       #match_tuple += ( str(participant['championId']) + ',')
       
@@ -36,11 +36,30 @@ for jsonFile in os.listdir(directory):
       role = participant['timeline']['role']
       team = participant['teamId']
       
-
-      championsArray.append(participant['championId'])
-
-    #match_tuple += winner
-    championsArray.append(winner)
-    csvWriter.writerow(championsArray)
+      if lane == "TOP" and team == 100:
+        championsTuple[0] = participant['championId']
+      if lane == "JUNGLE" and team == 100:
+        championsTuple[1] = participant['championId']
+      if lane == "MIDDLE" and team == 100:
+        championsTuple[2] = participant['championId']
+      if role == "DUO_CARRY" and team == 100:
+        championsTuple[3] = participant['championId']
+      if role == "DUO_SUPPORT" and team == 100:
+        championsTuple[4] = participant['championId']
+      if lane == "TOP" and team == 200:
+        championsTuple[5] = participant['championId']
+      if lane == "JUNGLE" and team == 200:
+        championsTuple[6] = participant['championId']
+      if lane == "MIDDLE" and team == 200:
+        championsTuple[7] = participant['championId']
+      if (role == "DUO_CARRY" or role == "DUO") and (championsTuple[8] == None) and team == 200:
+        championsTuple[8] = participant['championId']
+      if (role == "DUO_SUPPORT" or role == "DUO") and team == 200:
+        championsTuple[9] = participant['championId']
+      
+    championsTuple[10] = winner
+    
+    if None not in championsTuple:
+      csvWriter.writerow(championsTuple)
   inputFile.close()
   outputFile.close()

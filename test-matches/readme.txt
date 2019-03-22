@@ -1,7 +1,7 @@
 -1st 5 objects in match.participants are team 100 (blue team)
 -2nd 5 objects in match.participants are team 200 (red team)
 -order for csv:
-    b_top,b_jung,b_mid,b_adc,b_sup,r_top,r_jung,r_mid,r_adc,r_sup,winning_team
+    b_top,b_jung,b_mid,b_adc,b_sup, r_top,r_jung,r_mid,r_adc,r_sup,winning_team
 
     winning_team = 100 or 200
 
