@@ -24,21 +24,34 @@ dataset = pandas.read_csv(csv, names=names, float_precision='high')
 print(dataset.shape)
 # shows first 20 tuples
 print(dataset.head(20))
+print()
 
 # descriptions
-# print(dataset.describe())
+print('--== DESCRIPTION of DATASET ==--')
+print(dataset.describe())
+print('--== DESCRIPTION of DATASET ==--')
+print()
 
-# class distribution
-print('--== CLASS DISTRIBUTION ==--')
-print(dataset.groupby('class').size())
-print('--== CLASS DISTRIBUTION ==--')
-# scatter plot matrix
+# # class distribution
+# print('--== CLASS DISTRIBUTION ==--')
+# print(dataset.groupby('class').size())
+# print('--== CLASS DISTRIBUTION ==--')
+# print()
+
+# # scatter plot matrix
+# print('--== SCATTER PLOT MATRIX ==--')
 # scatter_matrix(dataset)
 # plt.show()
+# print('--== SCATTER PLOT MATRIX ==--')
+# print()
 
 # Split-out validation dataset
-array = dataset.values
-# print(array)
+# array = dataset.values
+array = dataset.to_numpy()
+print(array)
+# arraySlice[start_row:end_row_exclusive, start_col:end_col_exclusive]
+# X = tuples minus class
+# Y = just the classes of each tuple
 X = array[:,0:10]
 Y = array[:,10]
 validation_size = 0.20
