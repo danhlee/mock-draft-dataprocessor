@@ -16,12 +16,12 @@ from random import randint
 
 import sys
 
-
+# loads matches.csv
 # returns DataFrame
 def load_csv():
   csv = "matches.csv"
   names = ['b_top','b_jung','b_mid','b_bot','b_sup','r_top','r_jung','r_mid','r_bot','r_sup','class']
-  dataset = pandas.read_csv(csv, names=names, float_precision='high')
+  dataset = pandas.read_csv(csv, names=names)
   return dataset
 
 def describe_data(dataset):
